@@ -94,6 +94,10 @@ StarNutrition/
 
 **No Liability**: This project is for educational and personal use only. We assume no responsibility for the accuracy, completeness, or fitness of this information for any particular purpose.
 
+## Created By
+
+Created by [@alexduggleby.com](https://bsky.app/profile/alexduggleby.com) on Bluesky
+
 ## License
 
 This project is open source. The nutrition data belongs to Starbucks Corporation.
