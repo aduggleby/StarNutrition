@@ -100,4 +100,6 @@ Created by [@alexduggleby.com](https://bsky.app/profile/alexduggleby.com) on Blu
 
 ## License
 
-This project is open source. The nutrition data belongs to Starbucks Corporation.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+The nutrition data belongs to Starbucks Corporation.
