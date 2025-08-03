@@ -89,13 +89,7 @@ StarNutrition/
 ## Changelog
 
 ### 2025-08-03
-- Initial public release on GitHub
-- Implemented search-first interface with dynamic filtering
-- Added favorites system with localStorage persistence
-- Set up automated monthly data extraction via GitHub Actions
-- Deployed to GitHub Pages with Vite build process
-- Added trademark disclaimers and legal compliance
-- Released under MIT License
+- First published version
 
 ## Disclaimer
 
