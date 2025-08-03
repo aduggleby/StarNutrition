@@ -182,9 +182,6 @@ StarNutrition/
 3. Update `src/style.css` for styling
 4. Test on mobile and desktop
 
-### Custom Domain Setup
-See [CUSTOM_DOMAIN.md](CUSTOM_DOMAIN.md) for detailed instructions on mapping your own domain to this GitHub Pages site.
-
 ### Data Updates
 
 #### Automated Updates
