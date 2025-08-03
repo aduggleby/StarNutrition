@@ -1,3 +1,6 @@
+// Import styles for Vite to process
+import './style.css';
+
 // StarNutrition App - Enhanced with Modern UX Patterns
 
 class StarNutritionApp {
