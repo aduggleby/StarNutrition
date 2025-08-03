@@ -2,6 +2,8 @@
 
 A modern, mobile-first web application that displays nutritional information for Starbucks Austria beverages. Users can search for drinks, filter by size and milk variants, view detailed nutrition information, and favorite specific combinations.
 
+🔗 **[Live Demo](https://aduggleby.github.io/StarNutrition/)**
+
 ## ✨ Features
 
 ### 🎨 **Beautiful Modern Interface**
@@ -181,11 +183,23 @@ StarNutrition/
 4. Test on mobile and desktop
 
 ### Data Updates
+
+#### Automated Updates
+- **Monthly**: GitHub Actions automatically checks for updates on the 1st of each month
+- **Manual**: Trigger updates anytime via Actions tab → "Manual Nutrition Data Update"
+
+#### Local Updates
 The extraction script automatically:
 - Downloads the latest PDF from Starbucks Austria
 - Checks for changes using MD5 verification
 - Extracts and structures nutrition data
 - Validates extraction accuracy
+
+```bash
+# Run locally
+npm run extract        # Full extraction
+npm run extract:test   # Test mode
+```
 
 ## 📜 License
 

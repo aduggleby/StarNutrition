@@ -1,0 +1,73 @@
+name: Monthly Nutrition Data Update
+
+on:
+  schedule:
+    # Run on the 1st of every month at 2:00 AM UTC
+    - cron: '0 2 1 * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  extract-and-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pdfplumber
+    
+    - name: Run nutrition data extraction
+      run: |
+        python extract_nutrition.py --full
+    
+    - name: Check for changes
+      id: check_changes
+      run: |
+        git diff --quiet nutrition_data.json || echo "changes=true" >> $GITHUB_OUTPUT
+    
+    - name: Copy to public folder
+      if: steps.check_changes.outputs.changes == 'true'
+      run: |
+        cp nutrition_data.json public/nutrition_data.json
+    
+    - name: Commit and push if changed
+      if: steps.check_changes.outputs.changes == 'true'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add nutrition_data.json public/nutrition_data.json
+        git commit -m "🤖 Update nutrition data - $(date +'%Y-%m-%d')
+        
+        Automated extraction from Starbucks Austria PDF
+        Source: https://www.starbucks.at/sites/starbucks-at-pwa/files/2025-04/AT%20Beverage%20Nutrition%20Summer.pdf"
+        git push
+    
+    - name: Create issue if extraction fails
+      if: failure()
+      uses: actions/create-issue@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title: "Nutrition data extraction failed - ${{ github.run_id }}"
+        body: |
+          The automated nutrition data extraction has failed.
+          
+          **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          **Date:** ${{ github.event.head_commit.timestamp }}
+          
+          This could be due to:
+          - Changes in the PDF structure
+          - PDF URL changes
+          - Network issues
+          
+          Please investigate and update the extraction script if necessary.
+        labels: bug, automated
