@@ -32,11 +32,11 @@ jobs:
     - name: Run nutrition data extraction
       run: |
         if [ "${{ inputs.test_mode }}" == "true" ]; then
-          echo "Running in test mode..."
-          python extract_nutrition.py --test
+          echo "Running in test mode with forced download..."
+          python extract_nutrition.py --test --force
         else
-          echo "Running full extraction..."
-          python extract_nutrition.py --full
+          echo "Running full extraction with forced download..."
+          python extract_nutrition.py --full --force
         fi
     
     - name: Check for changes

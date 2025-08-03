@@ -510,8 +510,15 @@ def main():
     
     extractor = NutritionExtractor(pdf_url)
     
-    if len(sys.argv) > 1 and sys.argv[1] == "--test":
+    # Check for --force flag to skip MD5 checking
+    force_download = "--force" in sys.argv
+    if force_download:
+        print("Force mode: Will download PDF regardless of MD5 match")
+    
+    if "--test" in sys.argv:
         print("Running test extraction on pages 2-4...")
+        if force_download and os.path.exists(extractor.pdf_file):
+            os.remove(extractor.pdf_file)
         success = extractor.extract_test_pages(2, 4)
         if success:
             print("\nTest extraction completed successfully!")
@@ -519,8 +526,13 @@ def main():
             print("\nTest extraction failed!")
         return success
     
-    elif len(sys.argv) > 1 and sys.argv[1] == "--full":
+    elif "--full" in sys.argv:
         print("Running full PDF extraction...")
+        if force_download:
+            # In force mode, delete existing PDF to force re-download
+            if os.path.exists(extractor.pdf_file):
+                os.remove(extractor.pdf_file)
+                print("Removed existing PDF to force re-download")
         success = extractor.extract_full_pdf()
         if success:
             print("\nFull extraction completed successfully!")
@@ -530,8 +542,10 @@ def main():
     
     else:
         print("Usage:")
-        print("  python extract_nutrition.py --test   # Test on pages 2-4")
-        print("  python extract_nutrition.py --full   # Extract complete PDF")
+        print("  python extract_nutrition.py --test         # Test on pages 2-4")
+        print("  python extract_nutrition.py --full         # Extract complete PDF")
+        print("  python extract_nutrition.py --full --force # Force re-download and extract")
+        print("  python extract_nutrition.py --test --force # Force re-download and test")
         return False
 
 
