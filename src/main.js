@@ -38,7 +38,7 @@ class StarNutritionApp {
 
     async loadNutritionData() {
         try {
-            const response = await fetch('./public/nutrition_data.json');
+            const response = await fetch(import.meta.env.BASE_URL + 'nutrition_data.json');
             if (!response.ok) {
                 throw new Error('Failed to fetch nutrition data');
             }
