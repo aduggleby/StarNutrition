@@ -53,7 +53,7 @@ jobs:
         git add -f public/nutrition_data.json
         git commit -m "🤖 Update nutrition data - $(date +'%Y-%m-%d')
         
-        Automated extraction from Starbucks Austria PDF
+        Automated extraction from Starbucks® Austria PDF
         Source: https://www.starbucks.at/sites/starbucks-at-pwa/files/2025-04/AT%20Beverage%20Nutrition%20Summer.pdf"
         git push
     

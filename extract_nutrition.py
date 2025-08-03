@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Starbucks Austria Nutrition Data Extractor
+Starbucks® Austria Nutrition Data Extractor
 
-Downloads and extracts nutrition information from Starbucks Austria PDF,
+Downloads and extracts nutrition information from Starbucks® Austria PDF,
 converts it to structured JSON format for the web application.
 """
 

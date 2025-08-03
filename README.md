@@ -1,65 +1,52 @@
-# StarNutrition - Starbucks Austria Nutrition Information
+# StarNutrition
 
-A modern, mobile-first web application that displays nutritional information for Starbucks Austria beverages. Users can search for drinks, filter by size and milk variants, view detailed nutrition information, and favorite specific combinations.
+A web application that displays nutritional information for Starbucks® Austria beverages. Search drinks, filter by size and milk type, and save your favorites.
 
 🔗 **[Live Demo](https://aduggleby.github.io/StarNutrition/)**
 
-## ✨ Features
+## Overview
 
-### 🎨 **Beautiful Modern Interface**
-- **Mobile-First Design**: Optimized for touch with finger-friendly interactions
-- **Smooth Animations**: Fluid transitions and micro-interactions for delightful UX
-- **Glassmorphism Effects**: Modern backdrop blur and translucent elements
-- **Progressive Disclosure**: Clean interface that reveals features as needed
-- **Custom Modals**: Professional dialogs for nutrition details and confirmations
+StarNutrition extracts nutrition data from the official Starbucks® Austria PDF and presents it in an easy-to-use mobile-friendly interface. Users can:
+- Search for drinks by name
+- Filter by size and milk variants
+- View detailed nutrition information
+- Save favorite drink combinations
 
-### 🔍 **Smart Search & Filtering**
-- **Search-Driven Experience**: No information shown until user searches
-- **Dynamic Icons**: Search icon transforms to clear button when typing
-- **Real-time Filtering**: Instant results with size and milk type filters
-- **Contextual Filters**: Filters only appear when relevant (during search)
+## Getting Started
 
-### ⭐ **Granular Favorites System**
-- **Specific Combinations**: Favorite exact drink/size/milk combinations
-- **Visual Indicators**: Clear favorite status in nutrition modals
-- **Persistent Storage**: Favorites saved in browser localStorage
-- **Bulk Management**: Clear all favorites with custom confirmation modal
-
-### 📊 **Rich Nutrition Display**
-- **Detailed Modal View**: Beautiful full-screen nutrition information
-- **Key Metrics Highlighted**: Calories and caffeine prominently displayed
-- **Comprehensive Data**: All nutrition facts in organized grid layout
-- **Color-Coded Sections**: Easy visual hierarchy for quick scanning
-
-### 🛡️ **Data Transparency**
-- **Source Attribution**: Clear data source information with direct PDF links
-- **Disclaimer Modal**: Comprehensive disclaimer shown on first visit
-- **Processing Transparency**: Timestamps and automated extraction disclosure
-- **Data Information Link**: Easy access to source and disclaimer info
-
-## 🚀 Quick Start
+### Prerequisites
+- Node.js 16+ and npm
+- Python 3.7+ (for data extraction)
+- Git
 
 ### Installation
+
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/aduggleby/StarNutrition.git
 cd StarNutrition
 
 # Install dependencies
 npm install
 
-# Start development server
-npm run dev
+# Install Python dependencies for extraction
+pip install requests pdfplumber
 ```
 
-### Usage
-1. **Search**: Enter a drink name to see available options
-2. **Filter**: Use size and milk type filters that appear during search
-3. **View Details**: Click any drink variant for full nutrition information
-4. **Favorite**: Star specific combinations in the nutrition modal
-5. **Data Info**: Click "Data Information" in header for source details
+### Running Locally
 
-### Data Extraction
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Data Extraction
+
+The nutrition data is automatically extracted from Starbucks® Austria's official PDF:
+
 ```bash
 # Extract latest nutrition data
 npm run extract
@@ -68,143 +55,45 @@ npm run extract
 npm run extract:test
 ```
 
-## 📁 Project Structure
+The extraction script:
+- Downloads the PDF from Starbucks® Austria
+- Verifies changes using MD5 checksums
+- Extracts and structures nutrition data
+- Validates accuracy before saving
 
+## Development
+
+### Project Structure
 ```
 StarNutrition/
-├── index.html              # Main application HTML
+├── index.html              # Main HTML file
 ├── src/
-│   ├── main.js             # Application logic
-│   └── style.css           # Custom styles and Tailwind imports
+│   ├── main.js            # Application logic
+│   └── style.css          # Styles with Tailwind CSS
 ├── public/
-│   └── nutrition_data.json # Processed nutrition data
+│   └── nutrition_data.json # Extracted nutrition data
 ├── extract_nutrition.py    # PDF extraction script
-├── nutrition_data.json     # Source nutrition data
-├── package.json           # Dependencies and scripts
-├── vite.config.js         # Vite configuration
-└── README.md              # This file
+└── vite.config.js         # Build configuration
 ```
 
-## 🔧 Technical Details
+### Key Technologies
+- **Frontend**: Vanilla JavaScript, Tailwind CSS v4
+- **Build Tool**: Vite
+- **Deployment**: GitHub Pages with Actions
+- **Data Extraction**: Python with pdfplumber
 
-### Frontend Stack
-- **Framework**: Vanilla JavaScript (ES6+)
-- **Styling**: Tailwind CSS v4 with custom design system
-- **Build Tool**: Vite for development and production builds
-- **Storage**: Browser localStorage for favorites and preferences
+### Automated Updates
+- **Monthly**: GitHub Actions automatically checks for data updates on the 1st of each month
+- **Manual**: Trigger updates via the Actions tab
 
-### Data Processing
-- **PDF Extraction**: Python with `pdfplumber` library
-- **Source Verification**: MD5 hash checking for data updates
-- **Data Structure**: Hierarchical drink → size → milk variant → nutrition
-- **Validation**: Automated testing on sample pages
+## Disclaimer
 
-### Key Features Implementation
-- **Search-First UX**: No data shown until user searches
-- **Dynamic UI**: Filters and icons change based on user interaction
-- **Modal System**: Custom modals for nutrition, disclaimers, and confirmations
-- **Progressive Enhancement**: Clean fallbacks for all interactions
+**Trademark Notice**: Starbucks® is a registered trademark of Starbucks Corporation. This project is not affiliated with, endorsed by, or sponsored by Starbucks Corporation.
 
-## 📊 Data Schema
+**Data Accuracy**: This application automatically extracts nutrition data from publicly available Starbucks® Austria PDF documents. While we strive for accuracy, the automated extraction process may contain errors. Always consult official Starbucks® sources for the most current nutritional information.
 
-```json
-{
-  "drinks": [
-    {
-      "id": "unique_drink_id",
-      "name": "Drink Name",
-      "sizes": [
-        {
-          "size": "Size Name",
-          "milkVariants": [
-            {
-              "milkType": "Milk Type",
-              "nutrition": {
-                "calories": 150,
-                "fat": "6g",
-                "carbs": "22g", 
-                "protein": "8g",
-                "sugar": "20g",
-                "salt": "0.26g",
-                "caffeine": "89.1"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "source": "PDF URL",
-    "extracted_at": "ISO timestamp",
-    "total_drinks": 157
-  }
-}
-```
+**No Liability**: This project is for educational and personal use only. We assume no responsibility for the accuracy, completeness, or fitness of this information for any particular purpose.
 
-## 🌐 Browser Support
+## License
 
-- ✅ **Chrome/Edge**: Full support with all features
-- ✅ **Firefox**: Full support with all features  
-- ✅ **Safari**: Full support including iOS PWA features
-- ✅ **Mobile**: Optimized touch experience across all platforms
-
-## 📱 Mobile Features
-
-- **iOS PWA Prompt**: Smart installation guidance for iOS users
-- **Haptic Feedback**: Subtle vibrations on supported devices
-- **Safe Area Support**: Proper spacing for notched devices
-- **Touch Optimized**: 44px minimum touch targets throughout
-
-## 🔒 Privacy & Data
-
-- **No Tracking**: No analytics or user tracking
-- **Local Storage Only**: All data stored locally in browser
-- **Source Transparency**: Clear attribution to official Starbucks data
-- **Disclaimer System**: Comprehensive disclaimers with user acceptance
-
-## 📄 Dependencies
-
-### Runtime
-- **Vite**: Fast build tool and dev server
-- **Tailwind CSS v4**: Utility-first CSS framework
-
-### Data Extraction
-- **Python 3.7+**: Runtime environment
-- **requests**: HTTP requests for PDF download
-- **pdfplumber**: PDF text and table extraction
-
-## 🚀 Development
-
-### Adding Features
-1. Update `src/main.js` for new functionality
-2. Modify `index.html` for UI changes
-3. Update `src/style.css` for styling
-4. Test on mobile and desktop
-
-### Data Updates
-
-#### Automated Updates
-- **Monthly**: GitHub Actions automatically checks for updates on the 1st of each month
-- **Manual**: Trigger updates anytime via Actions tab → "Manual Nutrition Data Update"
-
-#### Local Updates
-The extraction script automatically:
-- Downloads the latest PDF from Starbucks Austria
-- Checks for changes using MD5 verification
-- Extracts and structures nutrition data
-- Validates extraction accuracy
-
-```bash
-# Run locally
-npm run extract        # Full extraction
-npm run extract:test   # Test mode
-```
-
-## 📜 License
-
-This project is for educational and personal use. Nutrition data belongs to Starbucks Corporation. The application provides automated extraction and display of publicly available information with full source attribution.
-
-## 🙏 Disclaimer
-
-This application automatically extracts nutrition data from official Starbucks Austria PDF documents. While we strive for accuracy, automated processing may contain errors. Always consult official Starbucks sources for the most current and accurate nutritional information.
+This project is open source. The nutrition data belongs to Starbucks Corporation.
