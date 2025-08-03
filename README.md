@@ -86,6 +86,17 @@ StarNutrition/
 - **Monthly**: GitHub Actions automatically checks for data updates on the 1st of each month
 - **Manual**: Trigger updates via the Actions tab
 
+## Changelog
+
+### 2025-08-03
+- Initial public release on GitHub
+- Implemented search-first interface with dynamic filtering
+- Added favorites system with localStorage persistence
+- Set up automated monthly data extraction via GitHub Actions
+- Deployed to GitHub Pages with Vite build process
+- Added trademark disclaimers and legal compliance
+- Released under MIT License
+
 ## Disclaimer
 
 **Trademark Notice**: Starbucks® is a registered trademark of Starbucks Corporation. This project is not affiliated with, endorsed by, or sponsored by Starbucks Corporation.
