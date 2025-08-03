@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#00704A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>StarNutrition - Starbucks Austria</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen font-sans antialiased safe-top safe-bottom" style="font-family: 'Inter', system-ui, sans-serif;">
+    
+    <!-- Header with gradient and safe area -->
+    <header class="sticky top-0 z-40 bg-starbucks-gradient safe-top">
+        <div class="px-4 py-6">
+            <div class="text-center">
+                <h1 class="text-white text-2xl font-bold tracking-tight">⭐ StarNutrition</h1>
+                <p class="text-green-100 text-sm mt-1 font-medium">
+                    Starbucks Austria Nutrition
+                    <button id="data-info-link" class="ml-2 text-green-200 hover:text-white underline focus:outline-none">
+                        Data Information
+                    </button>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="px-4 pb-4">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="drink-search" 
+                    placeholder="Search drinks..."
+                    class="w-full h-12 px-4 pr-12 bg-white/90 backdrop-blur-sm rounded-2xl border-0 text-gray-900 placeholder-gray-500 focus:bg-white focus:ring-2 focus:ring-white/50 focus:outline-none transition-all duration-200 search-input touch-target"
+                    autocomplete="off"
+                >
+                <button id="search-icon-btn" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none">
+                    <svg id="search-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <svg id="clear-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pb-6">
+        
+        <!-- Starred Drinks Section -->
+        <section id="starred-section" class="hidden animate-fade-in">
+            <div class="px-4 py-4">
+                <h2 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                    <span class="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center mr-3 text-sm">⭐</span>
+                    Your Favorites
+                </h2>
+                <div id="starred-drinks" class="space-y-3"></div>
+                <button id="clear-starred" class="mt-4 text-sm text-red-500 hover:text-red-700 font-medium focus-ring rounded-lg px-2 py-1 transition-colors">
+                    Clear all favorites
+                </button>
+            </div>
+        </section>
+
+        <!-- Filter Pills -->
+        <section id="filters-section" class="px-4 py-4 bg-white/50 backdrop-blur-sm border-y border-gray-200/50">
+            <!-- Size Filter -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Size</label>
+                <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1" id="size-options">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Milk Type Filter -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Milk Type</label>
+                <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1" id="milk-options">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Drinks List -->
+        <section class="px-4 py-4">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Available Drinks</h2>
+                <div id="results-count" class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full"></div>
+            </div>
+            
+            <div id="drinks-list" class="space-y-3">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            
+            <div id="no-results" class="text-center py-12 hidden">
+                <h3 id="no-results-title" class="text-lg font-medium text-gray-900 mb-2">No drinks found</h3>
+                <p id="no-results-text" class="text-gray-500 max-w-sm mx-auto">Try adjusting your search or filter criteria to find more drinks.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Nutrition Modal -->
+    <div id="nutrition-modal" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 modal-backdrop" id="modal-backdrop"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative flex items-end justify-center min-h-screen p-4 sm:items-center">
+            <div class="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl animate-slide-in-up sm:animate-scale-in overflow-hidden">
+                
+                <!-- Modal Header -->
+                <div class="relative bg-gradient-to-br from-green-600 to-green-700 text-white p-6 pb-8">
+                    <button id="close-modal" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors focus-ring text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="pr-12">
+                        <h3 id="modal-drink-name" class="text-xl font-bold mb-1"></h3>
+                        <p id="modal-drink-details" class="text-green-100 font-medium"></p>
+                    </div>
+                    
+                    <!-- Key Metrics -->
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
+                            <div id="modal-calories" class="text-2xl font-bold"></div>
+                            <div class="text-green-100 text-sm font-medium">Calories</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center">
+                            <div id="modal-caffeine" class="text-2xl font-bold"></div>
+                            <div class="text-green-100 text-sm font-medium">Caffeine (mg)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nutrition Details -->
+                <div class="p-6 space-y-4">
+                    <h4 class="font-semibold text-gray-900 mb-4">Nutrition Information</h4>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Fat</div>
+                            <div id="modal-fat" class="text-lg font-bold text-gray-900"></div>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Saturated Fat</div>
+                            <div id="modal-saturated-fat" class="text-lg font-bold text-gray-900"></div>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Carbs</div>
+                            <div id="modal-carbs" class="text-lg font-bold text-gray-900"></div>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Sugar</div>
+                            <div id="modal-sugar" class="text-lg font-bold text-gray-900"></div>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Protein</div>
+                            <div id="modal-protein" class="text-lg font-bold text-gray-900"></div>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Salt</div>
+                            <div id="modal-salt" class="text-lg font-bold text-gray-900"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3 pt-4">
+                        <button id="modal-star-btn" class="flex-1 h-12 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-semibold rounded-xl transition-all duration-200 btn-press focus-ring flex items-center justify-center">
+                            <span id="star-text" class="flex items-center">
+                                <span class="mr-2">⭐</span>
+                                Add to Favorites
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loading" class="fixed inset-0 z-50 bg-white flex items-center justify-center">
+        <div class="text-center">
+            <div class="spinner mx-auto mb-4"></div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Loading StarNutrition</h3>
+            <p class="text-gray-500">Preparing your nutrition data...</p>
+        </div>
+    </div>
+
+    <!-- Error Toast (will be shown via JS if needed) -->
+    <div id="error-toast" class="fixed top-4 left-4 right-4 z-50 hidden">
+        <div class="bg-red-500 text-white p-4 rounded-xl shadow-lg flex items-center">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+            <span id="error-message">Something went wrong. Please try again.</span>
+        </div>
+    </div>
+
+    <!-- Disclaimer Modal -->
+    <div id="disclaimer-modal" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl animate-scale-in overflow-hidden">
+                
+                <!-- Modal Header -->
+                <div class="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-6">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Data Information & Disclaimer</h3>
+                            <p class="text-blue-100 text-sm mt-1">Important information about this app</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="p-6 space-y-4">
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Data Source</h4>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            Nutrition data is automatically extracted from the official 
+                            <a id="disclaimer-source-link" href="#" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline font-medium">
+                                Starbucks Austria PDF document
+                            </a>
+                            and processed using automated extraction tools.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Important Disclaimers</h4>
+                        <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
+                            <p>
+                                <strong>Automated Processing:</strong> While we strive for accuracy, automated data extraction may contain errors or inconsistencies. This information should be used for reference purposes only.
+                            </p>
+                            <p>
+                                <strong>No Liability:</strong> We assume no responsibility for the accuracy, completeness, or fitness of this information for any particular purpose. Always consult official Starbucks sources for the most current and accurate nutritional information.
+                            </p>
+                            <p>
+                                <strong>Updates:</strong> Nutrition information may change. The app automatically checks for updates to the source document.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3 pt-4">
+                        <button id="disclaimer-accept" class="flex-1 h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 btn-press focus-ring">
+                            I Understand
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="w-full max-w-sm bg-white rounded-3xl shadow-2xl animate-scale-in overflow-hidden">
+                
+                <!-- Modal Header -->
+                <div class="bg-gradient-to-br from-red-500 to-red-600 text-white p-6 text-center">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 id="confirm-title" class="text-xl font-bold">Confirm Action</h3>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="p-6 text-center">
+                    <p id="confirm-message" class="text-gray-700 mb-6">Are you sure you want to proceed?</p>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3">
+                        <button id="confirm-cancel" class="flex-1 h-12 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-xl transition-all duration-200 btn-press focus-ring">
+                            Cancel
+                        </button>
+                        <button id="confirm-ok" class="flex-1 h-12 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-all duration-200 btn-press focus-ring">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- iOS Add to Home Screen Prompt -->
+    <div id="ios-install-prompt" class="fixed inset-x-0 bottom-0 z-50 hidden animate-slide-in-up">
+        <div class="mx-4 mb-6">
+            <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-green-600 to-green-700 p-4">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-2xl">⭐</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-white">Add StarNutrition to Home Screen</h3>
+                            <p class="text-green-100 text-sm">Quick access to nutrition info</p>
+                        </div>
+                        <button id="ios-install-close" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex items-start space-x-3 mb-4">
+                        <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span class="text-white text-sm font-bold">1</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-gray-700 text-sm">Tap the <strong>Share</strong> button in Safari</p>
+                            <div class="flex items-center mt-2">
+                                <svg class="w-5 h-5 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+                                </svg>
+                                <span class="text-gray-600 text-sm">Usually at the bottom of your screen</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span class="text-white text-sm font-bold">2</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-gray-700 text-sm">Select <strong>"Add to Home Screen"</strong></p>
+                            <div class="flex items-center mt-2">
+                                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-gray-600 text-sm">Then tap "Add" to confirm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "starnutrition2",
+  "version": "1.0.0",
+  "description": "A mobile-first web application that displays nutritional information for Starbucks Austria beverages, allowing users to search and filter drinks by size and milk variants, view detailed nutrition information, and star their favorite combinations.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "extract": "python extract_nutrition.py --full",
+    "extract:test": "python extract_nutrition.py --test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "tailwindcss": "^4.1.11",
+    "vite": "^7.0.6"
+  }
+}
