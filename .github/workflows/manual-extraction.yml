@@ -59,7 +59,8 @@ jobs:
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add nutrition_data.json public/nutrition_data.json
+        git add nutrition_data.json
+        git add -f public/nutrition_data.json
         git commit -m "🤖 Manual update nutrition data - $(date +'%Y-%m-%d')
         
         Manually triggered extraction from Starbucks Austria PDF
