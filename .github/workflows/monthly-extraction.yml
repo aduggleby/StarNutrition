@@ -1,15 +1,12 @@
 name: Monthly Nutrition Data Update
-
 on:
   schedule:
     # Run on the 1st of every month at 2:00 AM UTC
     - cron: '0 2 1 * *'
   workflow_dispatch: # Allow manual triggering
-
 permissions:
   contents: write
   issues: write
-
 jobs:
   extract-and-update:
     runs-on: ubuntu-latest
@@ -59,20 +56,20 @@ jobs:
     
     - name: Create issue if extraction fails
       if: failure()
-      uses: actions/create-issue@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        title: "Nutrition data extraction failed - ${{ github.run_id }}"
-        body: |
-          The automated nutrition data extraction has failed.
+      run: |
+        gh issue create \
+          --title "Nutrition data extraction failed - ${{ github.run_id }}" \
+          --body "The automated nutrition data extraction has failed.
           
           **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          **Date:** ${{ github.event.head_commit.timestamp }}
+          **Date:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
           
           This could be due to:
           - Changes in the PDF structure
           - PDF URL changes
           - Network issues
           
-          Please investigate and update the extraction script if necessary.
-        labels: bug, automated
+          Please investigate and update the extraction script if necessary." \
+          --label "bug,automated"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
